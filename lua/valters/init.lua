@@ -1,5 +1,5 @@
 require("valters.remap")
--- print("hello from valters")
+require("valters.set")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -17,6 +17,8 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   { "nvim-telescope/telescope.nvim" },
   'nvim-lua/plenary.nvim',
+
+  --Theme--
   {
     "rebelot/kanagawa.nvim",
     priority = 1000,
@@ -26,6 +28,8 @@ require("lazy").setup({
     },
     {"nvim-treesitter/nvim-treesitter", build = ":TSUpdate"},
     {"tpope/vim-fugitive"},
+
+    --LSP--
     {
 	"neovim/nvim-lspconfig",
 	dependencies =  {
@@ -36,8 +40,21 @@ require("lazy").setup({
 	config = function()
 		require("mason").setup()
 		require("mason-lspconfig").setup{
-			ensure_installed = { "lua_ls", "tsserver", "intelephense", }
+			ensure_installed = { "lua_ls","stylua", "tsserver", "intelephense", }
 			}
+		require("lspconfig").lua_ls.setup{}
+		require("lspconfig").tsserver.setup{}
 	end
     },
+    {
+  "nvim-tree/nvim-tree.lua",
+  version = "*",
+  lazy = false,
+  dependencies = {
+    "nvim-tree/nvim-web-devicons",
+  },
+    config = function()
+    require("nvim-tree").setup {}
+  end,
+},
 })
